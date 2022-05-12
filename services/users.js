@@ -32,6 +32,15 @@ class Users{
         }
     }
 
+    async getByEmail(email){
+        try{
+            return await UserModel.findOne({email})
+        }catch(error){
+            console.log(error)
+        }
+    }
+
+
     async update(id, data){
         try {
             const user = await UserModel.findByIdAndUpdate(id,data,{new:true})

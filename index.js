@@ -6,7 +6,7 @@ const {connection} = require("./config/db")
 const users = require("./routes/users")
 const auth = require("./routes/auth")
 
-//connection()
+connection()
 
 const app = express()
 

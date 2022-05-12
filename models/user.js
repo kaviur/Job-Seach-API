@@ -4,13 +4,25 @@ const Schema = mongoose.Schema
 
 const userSchema = new Schema({
     name:String,
-    password:String,
+    password:{
+        type:String,
+        required:true
+    },
     email:{
         type:String,
-        unique:true
+        unique:true,
+        required:true
     },
-    role:Number,
-    status:Number,
+    phone:String,
+    dni:String,
+    role:{
+        type:Number,
+        default:0
+    },
+    status:{
+        type:Number,
+        default:1
+    },
     photo:String,
     cover_page:String,
     country:String,
@@ -18,9 +30,10 @@ const userSchema = new Schema({
     proffesion:String,
     about:String,
     aptitudes:Array,
+    experience:Array,
     programming_languages:Array,
-    studies:Array,
-    status:Number,
+    education:Array,
+    openToWork:Number,
     my_applications:Array,
     offers:Array,
     company:String,

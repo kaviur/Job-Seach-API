@@ -1,31 +1,49 @@
 const jwt = require("jsonwebtoken")
 const { jwtSecret } = require('../config')
+const bcrypt = require("bcrypt")
 const User = require('./users')
 
 class Auth{
-    login(data){
-        return this.#createToken(data)
+    async login(data){
+        const {email,password} = data
+        const userServ = new User()
+        const user = await userServ.getByEmail(email)
+
+        if(user && await this.#compare(password,user.password)){
+            return this.#getUserData(user)
+        }
+
+        return {
+            error:true,
+            message:"Las credenciales no coinciden"
+        }
+
     }
 
     async signup(data){
         if(data.password){
             data.password = await this.#encrypt(data.password)
         }
-        const userServ = new User()
-        const user = await userServ.create(data)
 
+        const userServ = new User()
+        
+        const user = await userServ.create(data)
         if(user.error){
             return user
         }
 
+        return this.#getUserData(user)
+    }
+
+    #getUserData(user){
         const userData = {//puede hacerse así const{password,...userData} = user
             name:user.name,
             email:user.email,
+            role:user.role,
             id:user.id
         }
 
         const token = this.#createToken(userData)
-
         return {
             user:userData,
             token
@@ -42,6 +60,10 @@ class Auth{
         } catch (e) {
             console.log(e);
         }
+    }
+
+    async #compare(string,hash){
+        return await bcrypt.compare(string,hash)
     }
 
     #createToken(payload){
