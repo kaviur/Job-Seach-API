@@ -20,12 +20,12 @@ function users(app){
         return res.json(user)
     })
 
-    router.put("/:id",async (req,res)=>{
+    router.put("/update/:id",async (req,res)=>{
         const user = await userServ.update(req.params.id,req.body)
         return res.json(user)
     })
     
-    router.delete("/:id",async (req,res)=>{
+    router.delete("/delete/:id",async (req,res)=>{
         const user = await userServ.delete(req.params.id)
         return res.json(user)
     })
