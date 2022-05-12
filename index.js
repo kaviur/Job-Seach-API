@@ -5,6 +5,9 @@ const {connection} = require("./config/db")
 //Importing routes
 const users = require("./routes/users")
 const auth = require("./routes/auth")
+const companies = require("./routes/company")
+const offers = require("./routes/offer")
+const filters = require("./routes/filter")
 
 connection()
 
@@ -16,7 +19,9 @@ app.use(express.json())
 //Using routes
 users(app)
 auth(app)
-
+companies(app)
+offers(app)
+filters(app)
 
 app.listen(port,()=>{
     console.log("Listening: http://localhost:"+port)
