@@ -1,5 +1,5 @@
 const express = require("express")
-//const authValidation = require("../middleware/authValidation")
+const authValidation = require("../middleware/authValidation")
 const UserService = require("../services/users")
 
 function users(app){
@@ -8,13 +8,13 @@ function users(app){
     
     app.use("/api/users",router)
 
-    // router.get("/",...authValidation("admin"), async (req,res)=>{
+    router.get("/",authValidation, async (req,res)=>{
 
-    //     console.log(req.user)
-    //     const users = await userServ.getAll() // Array de usuarios
+        console.log(req.user)
+        const users = await userServ.getAll() // Array de usuarios
 
-    //     return res.json(users)
-    // })
+        return res.json(users)
+    })
     router.post("/",async (req,res)=>{
         const user = await userServ.create(req.body)
         return res.json(user)
