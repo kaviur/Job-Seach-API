@@ -4,16 +4,25 @@ const { jwtSecret } = require('../config')
 
 const isPostulant = (req, res, next) => {
     req.minRole = 1
+    req.filter = "none"
+    authValidation(req, res, next)
+}
+
+const isTheCreator = (req, res, next) => {
+    req.minRole = 1
+    req.filter = "creator"
     authValidation(req, res, next)
 }
   
 const isRecruiter = (req, res, next) => {
     req.minRole = 2
+    req.filter = "none"
     authValidation(req, res, next)
 }
   
 const isAdmin = (req, res, next) => {
     req.minRole = 3
+    req.filter = "none"
     authValidation(req, res, next)
 }
 
@@ -56,7 +65,22 @@ function authValidation(req,res,next) {
 const validateRole = (req, res, next) => {
   
     if (req.user.role >= req.minRole) {
-       next()
+       if(req.filter === "creator"){
+            if(req.user.id === req.params.author || req.user.role === 3){
+                //console.log(req.user.id,req.params.author)
+                next()
+            }else{
+                return res.status(403).json({
+                    success: false,
+                    error:true,
+                    message:"Forbidden action"
+                })
+            }
+        }else{
+            if(req.user.role === 3){
+                next()
+            }   
+        }
     } else {
         return res.status(403).json({
             success: false,
@@ -66,4 +90,4 @@ const validateRole = (req, res, next) => {
     }
 }
   
-module.exports = { isPostulant, isRecruiter, isAdmin }
+module.exports = { isPostulant, isRecruiter, isAdmin , isTheCreator }
