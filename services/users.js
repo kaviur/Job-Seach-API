@@ -32,6 +32,14 @@ class Users{
         }
     }
 
+    async getById(id){
+        try {
+            return await UserModel.findById(id)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     async getByEmail(email){
         try{
             return await UserModel.findOne({email})
