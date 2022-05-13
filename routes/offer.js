@@ -7,8 +7,20 @@ function offers(app) {
     app.use("/api/offer", router)
 
     router.get("/", async (_req, res) => {
-        const resCompanies = await offerServ.getAllOffer()
-        return res.json(resCompanies)
+        const resOffer = await offerServ.getAllOffer()
+        return res.json(resOffer)
+    })
+
+    router.get("/salary/:salary", async(req,res)=>{
+        const {salary} = req.params
+        const resOffer = await offerServ.getOfferForSalaryHigherThan(salary)
+        return res.json(resOffer)
+    })
+
+    router.post("/search", async(req,res)=>{
+        const {category,level,country,programmingLanguages,mode} = req.body
+        const resOffer = await offerServ.getOfferWithFilters(category,level,country,programmingLanguages,mode)
+        return res.json(resOffer)
     })
 
     // router.get("/salary/:min_salary/", async (_req, res) => {
@@ -25,20 +37,20 @@ function offers(app) {
     // })
 
     router.post("/", async(req,res)=>{
-        const rescompany = await offerServ.createOffer(req.body)
-        return res.json(rescompany)
+        const resOffer = await offerServ.createOffer(req.body)
+        return res.json(resOffer)
     })
 
     router.put("/:id", async(req,res)=>{
         const {body,params:{id}} = req
-        const rescompany = await offerServ.updateOffer(id,body)
-        return res.json(rescompany)
+        const resOffer = await offerServ.updateOffer(id,body)
+        return res.json(resOffer)
     })
 
     router.delete("/:id", async(req,res)=>{
         const {params:{id}} = req
-        const rescompany = await offerServ.deleteOffer(id)
-        return res.json(rescompany)
+        const resOffer = await offerServ.deleteOffer(id)
+        return res.json(resOffer)
     })
 }
 
