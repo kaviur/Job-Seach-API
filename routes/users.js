@@ -1,5 +1,5 @@
 const express = require("express")
-const {isAdmin, isRecruiter} = require("../middleware/authValidation")
+const {isAdmin, isTheCreator} = require("../middleware/authValidation")
 const UserService = require("../services/users")
 
 function users(app){
@@ -31,7 +31,13 @@ function users(app){
     })
 
     //sólo puede modificar si el parámetro id es igual al id del usuario que está logueado o si es admin
-    router.put("/update/:id",async (req,res)=>{
+    router.put("/update/:id/",async (req,res)=>{
+        const user = await userServ.update(req.params.id,req.body)
+        return res.json(user)
+    })
+
+    //sólo el admin puede inactivar un usuario
+    router.put("/inactive/:id/",isAdmin, async (req,res)=>{
         const user = await userServ.update(req.params.id,req.body)
         return res.json(user)
     })

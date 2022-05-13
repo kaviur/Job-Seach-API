@@ -73,13 +73,11 @@ const validateRole = (req, res, next) => {
                 return res.status(403).json({
                     success: false,
                     error:true,
-                    message:"Forbidden action"
+                    message:"Forbidden action - no es el autor ni el admin"
                 })
             }
         }else{
-            if(req.user.role === 3){
-                next()
-            }   
+            next()  
         }
     } else {
         return res.status(403).json({

@@ -1,6 +1,7 @@
 const {mongoose} = require('../config/db')
 
 const offerSchema = new mongoose.Schema({
+    authorId:String,
     title:String,
     description:String,
     publish_date: Date,
