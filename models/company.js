@@ -1,7 +1,7 @@
 const {mongoose} = require('../config/db')
 
 const companySchema = new mongoose.Schema({
-    user_id:String,
+    author:String,
     company_name:String,
     identification:String,
     countries:[String],
