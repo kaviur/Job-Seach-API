@@ -11,6 +11,19 @@ function offers(app) {
         return res.json(resCompanies)
     })
 
+    // router.get("/salary/:min_salary/", async (_req, res) => {
+
+    //     const { salary } = req.params;
+    //     //console.log(categoria);
+    //     try {
+    //         const planesFiltradosCat = await offerServ.getBySalary(salary);
+    //         //res.send(planesFiltradosCat);
+    //         return res.status(200).json(planesFiltradosCat)
+    //     } catch (err) {
+    //         res.status(400).send(err);
+    //     }
+    // })
+
     router.post("/", async(req,res)=>{
         const rescompany = await offerServ.createOffer(req.body)
         return res.json(rescompany)
