@@ -58,6 +58,15 @@ class Users{
         }
     }
 
+    //agregar una oferta a la lista de ofertas de empleo a las que aplicó un usuario
+    async addPostulation(idOffer, idApplicant) {
+        try {
+            return await UserModel.findByIdAndUpdate(idApplicant, { $push: { my_applications: {_id:idOffer} } }, { new: true })
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     async delete(id){
         try {
             const user = await UserModel.findByIdAndDelete(id)

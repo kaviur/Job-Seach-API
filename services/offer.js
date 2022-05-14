@@ -42,6 +42,22 @@ class OfferService {
         }
     }
 
+    //info de las ofertas que publicó un reclutador junto con la info de los postulantes que aplicaron a la oferta
+    async getOfferForRecruiter(idRecruiter){
+        const offer = await offerModel.find({authorId:idRecruiter}).populate("applicants")
+
+        //const teams = await TeamModel.find({members:idUser}).populate("members","name email").populate("idLeader","name email")
+        //const teams = await TeamModel.find({members:{  $elemMatch:{_id:idUser} }}).populate("members._id","name email").populate("idLeader","name email")
+        return offer
+    }
+
+    //verificar si un postulante ya aplicó a una oferta
+    async checkIfApplicant(idOffer, idApplicant) {
+        const offer = await offerModel.findById(idOffer)
+        const applicant = offer.applicants.find(applicant => applicant._id.toString() === idApplicant.toString())
+        return applicant
+    }
+
     //agregar un aplicante a la oferta
     async addApplicant(idOffer, idApplicant) {
         try {

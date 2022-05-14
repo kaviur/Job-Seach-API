@@ -27,14 +27,25 @@ const userSchema = new Schema({
     cover_page:String,
     country:String,
     city:String,
-    proffesion:String,
+    english_level:String,
+    profession:String,
     about:String,
     aptitudes:Array,
+    hardSkills:Array,
+    softSkills:Array,
+    mode:String,
     experience:Array,
     programming_languages:Array,
     education:Array,
     openToWork:Number,
-    my_applications:Array,
+    my_applications:[
+        {
+            _id:{
+                type:mongoose.Schema.Types.ObjectId,
+                ref:"offer"
+            }
+        }
+    ],
     offers:Array,
     company:String,
     favorites:Array

@@ -1,6 +1,6 @@
 const express = require("express")
 const OfferService = require("../services/offer")
-const {isTheCreator,isRecruiter} = require("../middleware/authValidation")
+const {isTheCreator,isRecruiter,isPostulant} = require("../middleware/authValidation")
 
 function offers(app) {
     const router = express.Router()
@@ -18,6 +18,13 @@ function offers(app) {
         return res.json(resOffer)
     })
 
+    //info de las ofertas que publicó un reclutador junto con la info de los postulantes que aplicaron a la oferta
+    router.get("/recruiterOffers",isRecruiter, async(req,res)=>{
+        const {id} = req.user
+        const resOffer = await offerServ.getOfferForRecruiter(id)
+        return res.json(resOffer)
+    })
+
     router.post("/search", async(req,res)=>{
         const {category,level,country,programmingLanguages,mode} = req.body
         const resOffer = await offerServ.getOfferWithFilters(category,level,country,programmingLanguages,mode)
@@ -29,9 +36,16 @@ function offers(app) {
         return res.json(resOffer)
     })
 
-    router.put("/addApplicant",async (req,res)=>{
-        const team = await offerServ.addApplicant(req.body.idOffer,req.body.idApplicant)
-        return res.json(team)
+    //aplicar a una oferta
+    router.put("/addApplicant",isPostulant,async (req,res)=>{
+        const {id} = req.user
+        const ifUserAlreadyApplied = await offerServ.checkIfApplicant(req.body.idOffer,id)
+        
+        if(ifUserAlreadyApplied){
+            return res.status(400).json({message:"You already applied to this offer"})
+        }
+        const resOffer = await offerServ.addApplicant(req.body.idOffer,id)
+        return res.json(resOffer)
     })
 
     router.put("/:id/:authorId",isTheCreator, async(req,res)=>{

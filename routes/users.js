@@ -1,5 +1,5 @@
 const express = require("express")
-const {isAdmin, isTheCreator} = require("../middleware/authValidation")
+const {isAdmin, isPostulant} = require("../middleware/authValidation")
 const UserService = require("../services/users")
 
 function users(app){
@@ -25,9 +25,21 @@ function users(app){
         return res.json(user)
     })
 
+    router.get("/myApplications",isPostulant,async (req,res)=>{
+        const {id} = req.user
+        const applications = await userServ.getMyApplications(id)
+        return res.json(applications)
+    })
+
     router.post("/",async (req,res)=>{
         const user = await userServ.create(req.body)
         return res.json(user)
+    })
+
+    //añadir una oferta al listado de ofertas a las que se ha postulado
+    router.put("/addApplication",isPostulant,async (req,res)=>{
+        const team = await userServ.addPostulation(req.body.idOffer,req.body.idApplicant)
+        return res.json(team)
     })
 
     //sólo puede modificar si el parámetro id es igual al id del usuario que está logueado o si es admin
