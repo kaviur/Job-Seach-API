@@ -36,6 +36,16 @@ class OfferService {
     async createOffer(data) {
         try {
             return await offerModel.create(data)
+            
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    //agregar un aplicante a la oferta
+    async addApplicant(idOffer, idApplicant) {
+        try {
+            return await offerModel.findByIdAndUpdate(idOffer, { $push: { applicants: {_id:idApplicant} } }, { new: true })
         } catch (error) {
             console.log(error)
         }

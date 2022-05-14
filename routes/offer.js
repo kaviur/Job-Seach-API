@@ -29,6 +29,11 @@ function offers(app) {
         return res.json(resOffer)
     })
 
+    router.put("/addApplicant",async (req,res)=>{
+        const team = await offerServ.addApplicant(req.body.idOffer,req.body.idApplicant)
+        return res.json(team)
+    })
+
     router.put("/:id/:authorId",isTheCreator, async(req,res)=>{
         const {body,params:{id}} = req
         const resOffer = await offerServ.updateOffer(id,body)

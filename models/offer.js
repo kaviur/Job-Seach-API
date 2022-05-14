@@ -12,7 +12,14 @@ const offerSchema = new mongoose.Schema({
     salary:Number,
     mode:String,
     english_level:String,
-    applicants:[String]
+    applicants:[
+        {
+            _id:{
+                type:mongoose.Schema.Types.ObjectId,
+                ref:"user"
+            }
+        }
+    ]
 })
 
 const offerModel = mongoose.model('offer', offerSchema)
