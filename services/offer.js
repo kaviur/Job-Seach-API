@@ -44,7 +44,7 @@ class OfferService {
 
     //info de las ofertas que publicó un reclutador junto con la info de los postulantes que aplicaron a la oferta
     async getOfferForRecruiter(idRecruiter){
-        const offer = await offerModel.find({authorId:idRecruiter}).populate()
+        const offer = await offerModel.find({authorId:idRecruiter}).populate("applicants")
 
         //const teams = await TeamModel.find({members:idUser}).populate("members","name email").populate("idLeader","name email")
         //const teams = await TeamModel.find({members:{  $elemMatch:{_id:idUser} }}).populate("members._id","name email").populate("idLeader","name email")
