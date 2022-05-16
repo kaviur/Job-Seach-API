@@ -4,18 +4,28 @@ const offerSchema = new mongoose.Schema({
     authorId:String,
     title:String,
     description:String,
-    publish_date: Date,
-    status:Number,
+    publish_date: {
+        type: Date,
+        default: Date.now
+    },
+    status:{
+        type:Number,
+        default: 1 //1: activa, 0: inactiva
+    },
     programming_languages:[String],
     categories:[String],
     countries:[String],
     salary:Number,
     mode:String,
     english_level:String,
-    applicants:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:"user"
-    }
+    applicants:[
+        {
+            _userData:{
+                type:mongoose.Schema.Types.ObjectId,
+                ref:"user"
+            }
+        }
+    ]
 })
 
 const offerModel = mongoose.model('offer', offerSchema)

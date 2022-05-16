@@ -53,7 +53,12 @@ function authValidation(req,res,next) {
             req.user = decoded
 
             //next()
-            validateRole(req, res, next)
+            if(req.filter === "onlyAuth"){
+                next()
+            }
+            else{
+                validateRole(req,res,next)
+            }
         }
         )
     }else{

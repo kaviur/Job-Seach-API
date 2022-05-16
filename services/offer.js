@@ -44,7 +44,7 @@ class OfferService {
 
     //info de las ofertas que publicó un reclutador junto con la info de los postulantes que aplicaron a la oferta
     async getOfferForRecruiter(idRecruiter){
-        const offer = await offerModel.find({authorId:idRecruiter}).populate("applicants")
+        const offer = await offerModel.find({authorId:idRecruiter}).populate('applicants.userData')
 
         //const teams = await TeamModel.find({members:idUser}).populate("members","name email").populate("idLeader","name email")
         //const teams = await TeamModel.find({members:{  $elemMatch:{_id:idUser} }}).populate("members._id","name email").populate("idLeader","name email")
@@ -67,10 +67,12 @@ class OfferService {
         }
     }
 
+    //eliminar una oferta sólo si es el autor o admin
     async deleteOffer(idOffer, idCreator, role) {
         try{
             const offer = await offerModel.findById(idOffer)
             if(offer.authorId.toString() === idCreator.toString() || role === 3){
+                const deletedOffer = await offerModel.findByIdAndDelete(idOffer)  
                 return await offerModel.findByIdAndDelete(idOffer)
             }else{
                 return {

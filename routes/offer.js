@@ -38,7 +38,7 @@ function offers(app) {
     })
 
     router.post("/", isRecruiter,async(req,res)=>{
-        const resOffer = await offerServ.createOffer(req.body,req.user.id)
+        const resOffer = await offerServ.createOffer(req.body)
         return res.json(resOffer)
     })
 
@@ -54,23 +54,15 @@ function offers(app) {
         return res.json(resOffer)
     })
 
+    //modificar una oferta sólo si es el creador o admin
     router.put("/:idOffer/:author",isTheCreator, async(req,res)=>{
         const {body,params:{idOffer},user:{id},user:{role}} = req
         const resOffer = await offerServ.updateOffer(idOffer,body,id,role)
         return res.json(resOffer)
     })
 
-    //Modificar una oferta sólo si es el creador de la misma opción dos (sin el middleware, haciendo una consulta a la base de datos extra)
-    // router.put("/:idOffer", async(req,res)=>{
-    //     const {body,params:{idOffer}} = req
-    //     const idCreator = req.user.id
-        
-    //     const resOffer = await offerServ.updateOffer(idOffer,body,idCreator)
-    //     return res.json(resOffer)
-    // })
-
     router.delete("/:idOffer/:author",isTheCreator, async(req,res)=>{
-        const {body,params:{idOffer},user:{id},user:{role}} = req
+        const {params:{idOffer},user:{id},user:{role}} = req
         const resOffer = await offerServ.deleteOffer(idOffer,id,role)
         return res.json(resOffer)
     })
