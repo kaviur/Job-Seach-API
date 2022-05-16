@@ -20,7 +20,7 @@ const offerSchema = new mongoose.Schema({
     english_level:String,
     applicants:[
         {
-            _userData:{
+            _id:{
                 type:mongoose.Schema.Types.ObjectId,
                 ref:"user"
             }
