@@ -28,6 +28,11 @@ class Users{
                    error:true,
                    message
                }
+           }else{
+                return {
+                     error:true,
+                     message:error.message
+                }
            }
         }
     }

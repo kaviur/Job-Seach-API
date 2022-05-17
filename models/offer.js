@@ -1,9 +1,26 @@
 const {mongoose} = require('../config/db')
 
 const offerSchema = new mongoose.Schema({
-    authorId:String,
-    title:String,
-    description:String,
+    authorId:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"User"
+    },
+    title:{
+        type: String,
+        trim: true,
+        required: true,
+        lowercase: true,
+    },
+    description:{
+        type: String,
+        trim: true,
+        required: true,
+        lowercase: true,
+    },
+    portafolio:{
+        type: String,
+        trim: true
+    },
     publish_date: {
         type: Date,
         default: Date.now
@@ -12,20 +29,61 @@ const offerSchema = new mongoose.Schema({
         type:Number,
         default: 1 //1: activa, 0: inactiva
     },
-    programming_languages:[String],
-    categories:[String],
-    countries:[String],
-    salary:Number,
-    mode:String,
-    english_level:String,
-    applicants:[
+    programming_languages:[
         {
-            _id:{
-                type:mongoose.Schema.Types.ObjectId,
-                ref:"user"
-            }
+            type:String,
+            trim: true,
+            lowercase: true
         }
-    ]
+    ],
+    categories:[
+        {
+            type:String,
+            trim: true,
+            required: true,
+            lowercase: true
+        }
+    ],
+    tools:[
+        {
+            type:String,
+            trim: true
+        }
+    ],
+    countries:[
+        {
+            type:String,
+            trim: true,
+            required: true,
+            lowercase: true
+        }
+    ],
+    salary:{
+        type:Number,
+        required: true
+    },
+    mode:{
+        type: String,
+        trim: true,
+        required: true,
+        lowercase: true,
+    },
+    english_level:{
+        type: String,
+        trim: true,
+        required: true,
+        lowercase: true,
+    },
+    applicants: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'User',
+        },
+    ],
+    companyId:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"Company"
+    }
 })
 
 const offerModel = mongoose.model('offer', offerSchema)

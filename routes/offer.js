@@ -12,6 +12,15 @@ function offers(app) {
         return res.json(resOffer)
     })
 
+    //info de las ofertas que publicó un reclutador junto con la info de los postulantes que aplicaron a la oferta
+    router.get("/recruiterOffers",isRecruiter, async(req,res)=>{
+        console.log(req.user)
+        const {id} = req.user
+        
+        const resOffer = await offerServ.getOfferForRecruiter(id)
+        return res.json(resOffer)
+    })
+    
     router.get("/:id", async (req, res) => {
         const { id } = req.params
         const resOffer = await offerServ.getOfferById(id)
@@ -24,32 +33,26 @@ function offers(app) {
         return res.json(resOffer)
     })
 
-    //info de las ofertas que publicó un reclutador junto con la info de los postulantes que aplicaron a la oferta
-    router.get("/recruiterOffers",isRecruiter, async(req,res)=>{
-        const {id} = req.user
-        const resOffer = await offerServ.getOfferForRecruiter(id)
-        return res.json(resOffer)
-    })
-
     router.post("/search", async(req,res)=>{
         const {category,level,country,programmingLanguages,mode} = req.body
         const resOffer = await offerServ.getOfferWithFilters(category,level,country,programmingLanguages,mode)
         return res.json(resOffer)
     })
 
+    //crear una oferta sólo si es reclutador o admin
     router.post("/", isRecruiter,async(req,res)=>{
-        const resOffer = await offerServ.createOffer(req.body)
+        const resOffer = await offerServ.createOffer(req.body,req.user.id)
         return res.json(resOffer)
     })
 
     //aplicar a una oferta
     router.put("/addApplicant",isPostulant,async (req,res)=>{
         const {id} = req.user
-        const ifUserAlreadyApplied = await offerServ.checkIfApplicant(req.body.idOffer,id)
+        // const ifUserAlreadyApplied = await offerServ.checkIfApplicant(req.body.idOffer,id)
         
-        if(ifUserAlreadyApplied){
-            return res.status(400).json({message:"You already applied to this offer"})
-        }
+        // if(ifUserAlreadyApplied){
+        //     return res.status(400).json({message:"You already applied to this offer"})
+        // }
         const resOffer = await offerServ.addApplicant(req.body.idOffer,id)
         return res.json(resOffer)
     })

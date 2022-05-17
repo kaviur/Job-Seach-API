@@ -48,7 +48,7 @@ function authValidation(req,res,next) {
                 })
             }
 
-            console.log(decoded)
+            console.log('middleware'+decoded)
             //mando la propiedad user a la ruta con los datos del toquen decodificados
             req.user = decoded
 
