@@ -3,7 +3,7 @@ const { jwtSecret } = require('../config')
 
 const OnlyAuthValidation = (req, res, next) => {
     req.filter = "onlyAuth"
-    authValidation(req, res, next)
+    verifyToken(req, res, next)
 }
 
 const isPostulant = (req, res, next) => {
@@ -28,6 +28,29 @@ const isAdmin = (req, res, next) => {
     req.minRole = 3
     req.filter = "none"
     authValidation(req, res, next)
+}
+
+const verifyToken = (req,res,next)=>{
+    const auth = req.header("Authorization")
+
+    if(!auth){
+        return res.status(403).json({success:false,error:true,message:"A token is required for this process"})
+    }
+    
+    const token = auth.split(" ")[1]
+    handleToken(token,req,res,next)
+}
+
+//todo: está repetido, organizar luego
+const handleToken=(token,req,res,next)=>{
+    try{
+        const decoded = jwt.verify(token,jwtSecret)
+        req.user = decoded
+        next()
+    }catch(error){
+        console.error("JWT error",error.message)
+        return res.status(403).json({success:false,error:true,message:"A valid token is required for this process"})
+    }
 }
 
 function authValidation(req,res,next) {
