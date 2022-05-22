@@ -33,7 +33,6 @@ const userSchema = new Schema({
     dni:{
         type:String,
         trim: true,
-        required: true,
         unique:true
     },
     phone:{
