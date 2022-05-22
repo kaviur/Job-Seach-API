@@ -21,7 +21,7 @@ function offers(app) {
         return res.json(resOffer)
     })
     
-    router.get("/:id", async (req, res) => {
+    router.get("/id/:id", async (req, res) => {
         const { id } = req.params
         const resOffer = await offerServ.getOfferById(id)
         return res.json(resOffer)

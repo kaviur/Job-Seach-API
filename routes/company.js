@@ -12,7 +12,7 @@ function companies(app) {
         return res.json(resCompanies)
     })
 
-    router.get("/:id", async (req, res) => {
+    router.get("/id/:id", async (req, res) => {
         const { id } = req.params
         const resCompany = await companyServ.getCompanyById(id)
         return res.json(resCompany)

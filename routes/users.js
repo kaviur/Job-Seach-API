@@ -18,7 +18,7 @@ function users(app){
         return res.json(users)
     })
 
-    router.get("/:id",async (req,res)=>{
+    router.get("/id/:id",async (req,res)=>{
         const user = await userServ.getById(req.params.id)
         return res.json(user)
     })
