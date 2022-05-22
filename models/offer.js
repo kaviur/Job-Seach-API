@@ -40,7 +40,6 @@ const offerSchema = new mongoose.Schema({
         {
             type:String,
             trim: true,
-            required: true,
             lowercase: true
         }
     ],
@@ -65,7 +64,6 @@ const offerSchema = new mongoose.Schema({
     mode:{
         type: String,
         trim: true,
-        required: true,
         lowercase: true,
     },
     english_level:{

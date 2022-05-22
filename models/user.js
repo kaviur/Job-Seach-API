@@ -12,7 +12,6 @@ const userSchema = new Schema({
     lastName:{
         type:String,
         trim: true,
-        required: true
     },
     password:{
         type:String,
