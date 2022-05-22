@@ -1,4 +1,5 @@
 const express = require("express")
+const cors = require("cors")
 const { port } = require("./config")
 const {connection} = require("./config/db")
 
@@ -15,6 +16,11 @@ const app = express()
 
 //Middleware de JSON
 app.use(express.json())
+app.use(cors(
+    {
+        origin: "*"
+    }
+))
 
 //Using routes
 users(app)

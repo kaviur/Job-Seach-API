@@ -1,5 +1,5 @@
 const express = require("express")
-const {isAdmin, isRecruiter} = require("../middleware/authValidation")
+const {isAdmin, isPostulant} = require("../middleware/authValidation")
 const UserService = require("../services/users")
 
 function users(app){
@@ -19,10 +19,14 @@ function users(app){
     })
 
     router.get("/:id",async (req,res)=>{
-
         const user = await userServ.getById(req.params.id)
-
         return res.json(user)
+    })
+
+    router.get("/myApplications",isPostulant,async (req,res)=>{
+        const {id} = req.user
+        const applications = await userServ.getMyApplications(id)
+        return res.json(applications)
     })
 
     router.post("/",async (req,res)=>{
@@ -30,8 +34,20 @@ function users(app){
         return res.json(user)
     })
 
+    //añadir una oferta al listado de ofertas a las que se ha postulado
+    router.put("/addApplication",isPostulant,async (req,res)=>{
+        const team = await userServ.addPostulation(req.body.idOffer,req.body.idApplicant)
+        return res.json(team)
+    })
+
     //sólo puede modificar si el parámetro id es igual al id del usuario que está logueado o si es admin
-    router.put("/update/:id",async (req,res)=>{
+    router.put("/update/:id/",async (req,res)=>{
+        const user = await userServ.update(req.params.id,req.body)
+        return res.json(user)
+    })
+
+    //sólo el admin puede inactivar un usuario
+    router.put("/inactive/:id/",isAdmin, async (req,res)=>{
         const user = await userServ.update(req.params.id,req.body)
         return res.json(user)
     })

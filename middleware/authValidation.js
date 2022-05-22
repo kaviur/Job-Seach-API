@@ -1,6 +1,10 @@
 const jwt = require('jsonwebtoken')
 const { jwtSecret } = require('../config')
 
+const OnlyAuthValidation = (req, res, next) => {
+    req.filter = "onlyAuth"
+    authValidation(req, res, next)
+}
 
 const isPostulant = (req, res, next) => {
     req.minRole = 1
@@ -44,12 +48,17 @@ function authValidation(req,res,next) {
                 })
             }
 
-            console.log(decoded)
+            console.log('middleware'+decoded)
             //mando la propiedad user a la ruta con los datos del toquen decodificados
             req.user = decoded
 
             //next()
-            validateRole(req, res, next)
+            if(req.filter === "onlyAuth"){
+                next()
+            }
+            else{
+                validateRole(req,res,next)
+            }
         }
         )
     }else{
@@ -73,13 +82,11 @@ const validateRole = (req, res, next) => {
                 return res.status(403).json({
                     success: false,
                     error:true,
-                    message:"Forbidden action"
+                    message:"Forbidden action - no es el autor ni el admin"
                 })
             }
         }else{
-            if(req.user.role === 3){
-                next()
-            }   
+            next()  
         }
     } else {
         return res.status(403).json({
@@ -90,4 +97,4 @@ const validateRole = (req, res, next) => {
     }
 }
   
-module.exports = { isPostulant, isRecruiter, isAdmin , isTheCreator }
+module.exports = { isPostulant, isRecruiter, isAdmin, isTheCreator, OnlyAuthValidation }
