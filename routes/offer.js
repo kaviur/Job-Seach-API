@@ -68,7 +68,7 @@ function offers(app) {
         return res.json(resOffer)
     })
 
-    router.delete("/:idOffer/:author",isTheCreator, async(req,res)=>{
+    router.delete("/delete/:idOffer/:author",isTheCreator, async(req,res)=>{
         const {params:{idOffer},user:{id},user:{role}} = req
         const resOffer = await offerServ.deleteOffer(idOffer,id,role)
         return res.json(resOffer)

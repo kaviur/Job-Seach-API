@@ -23,14 +23,14 @@ function companies(app) {
         return res.json(rescompany)
     })
 
-    router.put("/:id/:author/", isTheCreator, async(req,res)=>{
+    router.put("/update/:id/:author/", isTheCreator, async(req,res)=>{
         const {body,params:{id}} = req
         console.log(body,id)
         const rescompany = await companyServ.updateCompany(id,body)
         return res.json(rescompany)
     })
 
-    router.delete("/:id/:author/", isTheCreator, async(req,res)=>{
+    router.delete("/delete/:id/:author/", isTheCreator, async(req,res)=>{
         const {params:{id}} = req
         const rescompany = await companyServ.deleteCompany(id)
         return res.json(rescompany)
