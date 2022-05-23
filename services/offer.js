@@ -5,7 +5,11 @@ class OfferService {
         try {
             return await offerModel.find()
         } catch (error) {
-            console.log(error)
+            return {
+                success: false,
+                error: error,
+                message: "Error al obtener las ofertas"
+            }
         }
     }
 
@@ -13,7 +17,11 @@ class OfferService {
         try {
             return await offerModel.find({ salary: { $gte: salary } })
         } catch (error) {
-            console.log(error)
+            return {
+                success: false,
+                error: error,
+                message: "Error al obtener las ofertas"
+            }
         }
     }
 
@@ -21,7 +29,11 @@ class OfferService {
         try {
             return await offerModel.find({ $or: [{ categories: category }, { english_level: level }, { countries: country }, { programming_languages: programmingLanguages }, { mode: vmode }] })
         } catch (error) {
-            console.log(error)
+            return {
+                success: false,
+                error: error,
+                message: "Error al obtener las ofertas"
+            }
         }
     }
 
@@ -29,7 +41,11 @@ class OfferService {
         try {
             return await offerModel.findById(id)
         } catch (error) {
-            console.log(error)
+            return {
+                success: false,
+                error: error,
+                message: "Error al obtener la oferta"
+            }
         }
     }
 
@@ -38,18 +54,26 @@ class OfferService {
             return await offerModel.create({...data,authorId:recruiterId})
             
         } catch (error) {
-            console.log(error)
+            return {
+                success: false,
+                error: error,
+                message: "Error al crear la oferta"
+            }
         }
     }
 
     //info de las ofertas que publicó un reclutador junto con la info de los postulantes que aplicaron a la oferta
     async getOfferForRecruiter(idRecruiter){
-        console.log(idRecruiter)
-        const offer = await offerModel.find({authorId:idRecruiter}).populate("applicants","name email")
-
-        //const teams = await TeamModel.find({members:idUser}).populate("members","name email").populate("idLeader","name email")
-        //const teams = await TeamModel.find({members:{  $elemMatch:{_id:idUser} }}).populate("members._id","name email").populate("idLeader","name email")
-        return offer
+        try{
+            const offer = await offerModel.find({authorId:idRecruiter}).populate("applicants","name email")
+            return offer
+        }catch(error){
+            return {
+                success:false,
+                error:error,
+                message:"Error al obtener las ofertas"
+            }
+        }
     }
 
     //verificar si un postulante ya aplicó a una oferta
@@ -66,7 +90,11 @@ class OfferService {
             return await offerModel.findByIdAndUpdate(idOffer, { $push: { applicants: idApplicant } }, { new: true })
             //return await offerModel.findByIdAndUpdate(idOffer, {  applicants: {idApplicant} }, { new: true })
         } catch (error) {
-            console.log(error)
+            return {
+                success: false,
+                error: error,
+                message: "Error al agregar el postulante"
+            }
         }
     }
 
@@ -75,7 +103,7 @@ class OfferService {
         try{
             const offer = await offerModel.findById(idOffer)
             if(offer.authorId.toString() === idCreator.toString() || role === 3){
-                const deletedOffer = await offerModel.findByIdAndDelete(idOffer)  
+                //const deletedOffer = await offerModel.findByIdAndDelete(idOffer)  
                 return await offerModel.findByIdAndDelete(idOffer)
             }else{
                 return {
@@ -85,7 +113,11 @@ class OfferService {
                 }
             }
         }catch(error){
-            console.log(error)
+            return {
+                success:false,
+                error:error,
+                message:"Error al eliminar la oferta"
+            }
         }
     }
 
@@ -102,7 +134,11 @@ class OfferService {
                 }
             }
         } catch (error) {
-            console.log(error)
+            return {
+                success: false,
+                error: error,
+                message: "Error al actualizar la oferta"
+            }
         }
     }
 }
