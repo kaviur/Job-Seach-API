@@ -76,6 +76,19 @@ class OfferService {
         }
     }
 
+    async getOfferForPostulant(idApplicant){
+        try{
+            const offer = await offerModel.find({applicants:idApplicant})
+            return offer
+        }catch(error){
+            return {
+                success:false,
+                error:error,
+                message:"Error al obtener las ofertas"
+            }
+        }
+    }
+
     //verificar si un postulante ya aplicó a una oferta
     async checkIfApplicant(idOffer, idApplicant) {
         const offer = await offerModel.findById(idOffer)

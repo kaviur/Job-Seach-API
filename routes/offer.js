@@ -20,6 +20,14 @@ function offers(app) {
         const resOffer = await offerServ.getOfferForRecruiter(id)
         return res.json(resOffer)
     })
+
+    router.get("/applicantOffers",isPostulant, async(req,res)=>{
+        console.log(req.user)
+        const {id} = req.user
+        
+        const resOffer = await offerServ.getOfferForPostulant(id)
+        return res.json(resOffer)
+    })
     
     router.get("/id/:id", async (req, res) => {
         const { id } = req.params
