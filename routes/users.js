@@ -23,6 +23,11 @@ function users(app){
         return res.json(user)
     })
 
+    router.get("/developers",async (req,res)=>{
+        const users = await userServ.getDevelopers()
+        return res.json(users)
+    })
+
     router.get("/myApplications",isPostulant,async (req,res)=>{
         const {id} = req.user
         const applications = await userServ.getMyApplications(id)

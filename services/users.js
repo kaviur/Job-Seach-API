@@ -12,6 +12,15 @@ class Users{
         }
     }
 
+    async getDevelopers(){
+        try {
+            const users = await UserModel.find({role: 1})
+            return users
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     async create( data ){
         try {
             const user = await UserModel.create(data)
