@@ -48,11 +48,15 @@ function offers(app) {
     //aplicar a una oferta
     router.put("/addApplicant",isPostulant,async (req,res)=>{
         const {id} = req.user
-        // const ifUserAlreadyApplied = await offerServ.checkIfApplicant(req.body.idOffer,id)
+        const ifUserAlreadyApplied = await offerServ.checkIfApplicant(req.body.idOffer,id)
         
-        // if(ifUserAlreadyApplied){
-        //     return res.status(400).json({message:"You already applied to this offer"})
-        // }
+        if(ifUserAlreadyApplied){
+            return res.status(400).json({
+                success:false,
+                error:true,
+                message:"Ya habías aplicado a esta oferta antes"
+            })
+        }
         const resOffer = await offerServ.addApplicant(req.body.idOffer,id)
         return res.json(resOffer)
     })
