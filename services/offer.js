@@ -25,9 +25,26 @@ class OfferService {
         }
     }
 
-    async getOfferWithFilters(category,level,country,programmingLanguages,vmode) {
+    // async getOfferWithFilters(category,level,country,programmingLanguages,vmode) {
+    //     try {
+    //         return await offerModel.find({ $or: [{ categories: category }, { english_level: level }, { countries: country }, { programming_languages: programmingLanguages }, { mode: vmode }] })
+    //     } catch (error) {
+    //         return {
+    //             success: false,
+    //             error: error,
+    //             message: "Error al obtener las ofertas"
+    //         }
+    //     }
+    // }
+
+    async getOfferWithFilters(category, level, country, programmingLanguages, vmode) {
         try {
-            return await offerModel.find({ $or: [{ categories: category }, { english_level: level }, { countries: country }, { programming_languages: programmingLanguages }, { mode: vmode }] })
+            return await offerModel.find({
+                $and: [
+                    { english_level: level },
+                    { programming_languages: programmingLanguages }
+                ]
+            })
         } catch (error) {
             return {
                 success: false,
@@ -36,6 +53,7 @@ class OfferService {
             }
         }
     }
+
 
     async getOfferById(id) {
         try {
@@ -110,6 +128,20 @@ class OfferService {
             }
         }
     }
+
+    //desaplicar de una oferta
+    async unApply(idOffer, idApplicant) {
+        try {
+            return await offerModel.findByIdAndUpdate(idOffer, { $pull: { applicants: idApplicant } }, { new: true })
+        } catch (error) {
+            return {
+                success: false,
+                error: error,
+                message: "Error al desapilar el postulante"
+            }
+        }
+    }
+            
 
     //eliminar una oferta sólo si es el autor o admin
     async deleteOffer(idOffer, idCreator, role) {

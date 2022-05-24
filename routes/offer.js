@@ -69,6 +69,13 @@ function offers(app) {
         return res.json(resOffer)
     })
 
+    //desaplicar de una oferta
+    router.put("/unApply",isPostulant,async (req,res)=>{
+        const {id} = req.user
+        const resOffer = await offerServ.unApply(req.body.idOffer,id)
+        return res.json(resOffer)
+    })
+
     //modificar una oferta sólo si es el creador o admin
     router.put("/:idOffer/:author",isTheCreator, async(req,res)=>{
         const {body,params:{idOffer},user:{id},user:{role}} = req
