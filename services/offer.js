@@ -38,20 +38,28 @@ class OfferService {
     // }
 
     async getOfferWithFilters(category, level, country, programmingLanguages, vmode) {
-        try {
-            return await offerModel.find({
-                $and: [
-                    { english_level: level },
-                    { programming_languages: programmingLanguages }
-                ]
-            })
-        } catch (error) {
-            return {
-                success: false,
-                error: error,
-                message: "Error al obtener las ofertas"
-            }
+        if(!category && !level && !country && !programmingLanguages && !vmode){
+            return await offerModel.find()
         }
+        const filters = {
+            $and: []
+        }
+        if (category) {
+            filters.$and.push({ categories: category })
+        }
+        if (level) {
+            filters.$and.push({ english_level: level })
+        }
+        if (country) {
+            filters.$and.push({ countries: country })
+        }
+        if (programmingLanguages) {
+            filters.$and.push({ programming_languages: programmingLanguages })
+        }
+        if (vmode) {
+            filters.$and.push({ mode: vmode })
+        }
+        return await offerModel.find(filters)
     }
 
 
